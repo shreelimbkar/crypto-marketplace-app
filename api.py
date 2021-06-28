@@ -2,7 +2,7 @@ from flask import Flask
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
+app = Flask(__name__, static_folder='frontend/build', static_url_path='')
 CORS(app)
 
 
@@ -23,4 +23,4 @@ def serve():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='8080')  # Run the flask app at port 8080
+    app.run()
