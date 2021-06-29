@@ -11,7 +11,7 @@ CORS(app)
 def api():
     return {
         'userid': 1,
-        'title': 'Flask react Application -SHRI-NEW',
+        'title': 'Flask react Application',
         'completed': False
     }
 
