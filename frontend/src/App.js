@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
-function App() {
-  const [initialData, setInitialData] = useState([{}]);
+import { Login } from './components/user';
 
-  useEffect(() => {
-    fetch("/api")
-      .then((response) => response.json())
-      .then((data) => setInitialData(data));
-  }, []);
+function App() {
   return (
-    <div className="App">
-      <h1>{initialData.title}</h1>
-    </div>
+    <Router>
+      <div>
+        <Switch>
+          <Route path="/" component={Login} exact />
+        </Switch>
+        </div>
+    </Router>
   );
 }
 
