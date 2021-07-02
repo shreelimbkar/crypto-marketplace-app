@@ -7,13 +7,16 @@ import { Login } from './components/user';
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Switch>
-          <Route path="/" component={Login} exact />
-        </Switch>
-        </div>
-    </Router>
+    // <Router>
+    //   <div>
+    //     <Switch>
+    //       <Route path="/" component={Login} exact />
+    //     </Switch>
+    //     </div>
+    // </Router>
+    <div>
+      <h1>Hello World</h1>
+    </div>
   );
 }
 
