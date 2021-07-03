@@ -4,15 +4,7 @@ import "./login.css";
 
 import { Container, Row, Col } from "react-bootstrap";
 
-export default function Login() {
-  //   const [initialData, setInitialData] = useState([{}]);
-
-  //   useEffect(() => {
-  //     fetch("/api")
-  //       .then((response) => response.json())
-  //       .then((data) => setInitialData(data));
-  //   }, []);
-
+export default function Register() {
   return (
     <Container fluid className="App">
       <Row className="pt-5">
@@ -22,7 +14,27 @@ export default function Login() {
             className="p-5"
             style={{ backgroundColor: "#ffd55a", color: "#293250" }}
           >
-            <h3 className="text-center">Log in</h3>
+            <h3 className="text-center">Register</h3>
+
+            <div className="form-group">
+              <label for="firstname">First name</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="First name"
+                id="firstname"
+              />
+            </div>
+
+            <div className="form-group">
+              <label for="lastname">Last name</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Last name"
+                id="lastname"
+              />
+            </div>
 
             <div className="form-group">
               <label for="email">Email</label>
@@ -49,9 +61,9 @@ export default function Login() {
               className="btn btn-dark btn-lg btn-block"
               style={{ backgroundColor: "#293250", color: "#fff" }}
             >
-              Log in
+              Register
             </button>
-            <Link to="/register">Register</Link>
+            <Link to="/">Login</Link>
           </form>
         </Col>
       </Row>
