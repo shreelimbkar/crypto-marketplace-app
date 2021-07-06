@@ -14,7 +14,7 @@ function App() {
         <Row>
           <Col>
             <Switch>
-              <Route path="/" component={Home} exact />
+              <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
             </Switch>
