@@ -18,9 +18,9 @@ export default function header() {
         </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link href="./">Home</Nav.Link>
-            <Nav.Link href="./register">Register</Nav.Link>
-            <Nav.Link href="./login">Log In</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/register">Register</Nav.Link>
+            <Nav.Link href="/login">Log In</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
