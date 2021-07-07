@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Container fluid className="App">
         <Row>
-          <Col>
+          <Col className="p-0">
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
