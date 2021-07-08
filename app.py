@@ -3,8 +3,7 @@ from flask import request
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 
-import os
-import requests
+import articles
 import users
 import news
 import subscription
@@ -44,8 +43,22 @@ def newSubscribe():
     if request.method == 'POST':
         req_json = request.json
         emailid = req_json['emailid']
-        print("EMAIL ID = ", emailid)
     return subscription.subscribe(emailid)
+
+@app.route('/api/articles', methods=['GET'])
+@cross_origin()
+def getAllArticles():
+    return articles.getArticles()
+
+@app.route('/api/article', methods=['POST'])
+@cross_origin()
+def newArticle():
+    if request.method == 'POST':
+        req_json = request.json
+        title = req_json['title']
+        desc = req_json['description']
+        # print("EMAIL ID = ", emailid)
+    return articles.addNewArticle(title, desc)
 
 if __name__ == "__main__":
     app.run()
