@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 import os
 import requests
 import users
+import news
 
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
 CORS(app)
@@ -30,6 +31,10 @@ def api():
 def getAllusers():
     return users.getUsers()
 
+@app.route('/api/news', methods=['GET'])
+@cross_origin()
+def getAllnews():
+    return news.getNews()
 
 if __name__ == "__main__":
     app.run()

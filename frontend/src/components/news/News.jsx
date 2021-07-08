@@ -6,15 +6,13 @@ import NewsList from "./NewsList";
 
 export default function News() {
   const [data, setData] = useState([]);
-  const apikey = "cbce94fb8af54702ab0a55a412420aa8";
 
   useEffect(() => {
     axios
-      .get(
-        `https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=popularity&apiKey=${apikey}`
-      )
+      .get("/api/news")
       .then((response) => {
-        setData(response.data);
+        const result = JSON.parse(response.data.data);
+        setData(result);
       })
       .catch((error) => console.log(error));
   }, []);
