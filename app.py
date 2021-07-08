@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
+import hashlib
 
 import articles
 import users
@@ -31,6 +32,21 @@ def api():
 @cross_origin()
 def getAllusers():
     return users.getUsers()
+
+@app.route('/api/users/register', methods=['POST'])
+@cross_origin()
+def newUser():
+    if request.method == 'POST':
+        req_json = request.json
+        firstName = req_json['firstName']
+        lastName = req_json['lastName']
+        email = req_json['email']
+        pwd = req_json['password']
+        # Password encryption with Salt and hash
+        salt = hashlib.md5(pwd.encode())
+        pwd = salt.hexdigest()
+        userData = [firstName, lastName, email, pwd]
+    return users.register(userData)
 
 @app.route('/api/news', methods=['GET'])
 @cross_origin()

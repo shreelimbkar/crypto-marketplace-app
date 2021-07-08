@@ -36,7 +36,6 @@ def addNewArticle(title, desc):
     try:
         data = {'title': title, 'description': desc}
         result = requests.post(f'{SUPABASE_URL}/articles', headers=SUPABASE_HEADERS, json=data)
-        print("RESULT = ", result)
         if(result):
             response = {'success': True, 'data': result.text}
             retData = app.response_class(
