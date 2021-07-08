@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 
 import os
 import requests
+import users
 
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
 CORS(app)
@@ -26,17 +27,8 @@ def api():
 
 @app.route('/api/users', methods=['GET'])
 @cross_origin()
-def users():
-    print("SUPABASE_URL: ", os.getenv('SUPABASE_URL'))
-    print("SUPABASE_API_KEY: ", os.getenv('SUPABASE_API_KEY'))
-    SUPABASE_URL = os.getenv('SUPABASE_URL')
-    SUPABASE_HEADERS = {
-        'apikey': os.getenv('SUPABASE_API_KEY'),
-        'Authorization': 'Bearer' + os.getenv('SUPABASE_API_KEY')
-    }
-    response = requests.get(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS)
-
-    return response.text
+def getAllusers():
+    return users.getUsers()
 
 
 if __name__ == "__main__":
