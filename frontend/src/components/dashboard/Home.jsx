@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import bitcoin from "../../assets/bitcoin2.jpg";
+import News from "../news/News";
 
 export default function Home() {
   return (
@@ -44,7 +45,10 @@ export default function Home() {
             <Col sm={4} className="p-4">
               <Card>
                 <Card.Header as="h5">Cryptocurrency News</Card.Header>
-                <Card.Body></Card.Body>
+                <Card.Body>
+                  {/* <NewsContextProvider>hello</NewsContextProvider> */}
+                  <News />
+                </Card.Body>
               </Card>
             </Col>
           </Row>
