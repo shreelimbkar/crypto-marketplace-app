@@ -40,11 +40,16 @@ code {
 #main {
   min-height: calc(100vh - 120px);
   background-color: #fff;
+  color: $bg-color;
 
   .banner-img {
     width: 100%;
     height: 300px;
     object-fit: cover;
+  }
+  .news-list {
+    max-height: 100vh;
+    overflow: scroll;
   }
   .news-img {
     width: 100%;
