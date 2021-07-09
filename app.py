@@ -33,6 +33,16 @@ def api():
 def getAllusers():
     return users.getUsers()
 
+@app.route("/api/users/login", methods=['POST'])  # Login user
+def userLogin():
+    if request.method == 'POST':
+        req_json = request.json
+        email = req_json['email']
+        pwd = req_json['password']
+        salt = hashlib.md5(pwd.encode())
+        pwd = salt.hexdigest()
+    return users.login(email, pwd)
+
 @app.route('/api/users/register', methods=['POST'])
 @cross_origin()
 def newUser():

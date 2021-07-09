@@ -36,6 +36,33 @@ def getUsers():
     except Exception as e:
         return {'success': False, 'message': str(e)}, 500
 
+def login(email, pwd):
+    SUPABASE_HEADERS['Content-Type'] = 'application/json'
+    SUPABASE_HEADERS['Prefer'] = 'return=representation'
+    if len(email.strip()) <= 0:
+        return {'status': 500, 'responseMessage': 'Invalid Username. Please try again!'}, 500
+
+    if len(pwd.strip()) <= 0:
+        return {'status': 500, 'responseMessage': 'Invalid Password. Please try again!'}, 500
+
+    # encoded = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow(
+    # ) + datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
+    try:
+        print("EMAIL, PWD", email, pwd)
+        result = requests.get(f'{SUPABASE_URL}/users?select=*', headers=SUPABASE_HEADERS)
+        if(result):
+            response = {'success': True, 'data': result.text}
+            retData = app.response_class(
+                response=json.dumps(response),
+                status=200,
+                mimetype='application/json'
+            )
+            return retData;
+        else:
+            return {'success': False, 'status': 500, 'message': 'Unauthorized User. Please try again!'}, 500
+    except Exception as e:
+        return {'status': 500, 'responseMessage': str(e)}, 500
+
 def register(userData):
     SUPABASE_HEADERS['Content-Type'] = 'application/json'
     SUPABASE_HEADERS['Prefer'] = 'return=representation'
