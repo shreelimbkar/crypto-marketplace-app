@@ -113,7 +113,7 @@ export default function Register() {
               <input
                 type="email"
                 className="form-control"
-                placeholder="Enter email"
+                placeholder="Enter your email"
                 name="email"
                 id="email"
                 autoComplete="off"
