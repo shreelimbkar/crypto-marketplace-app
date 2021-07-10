@@ -10,20 +10,26 @@ export default function Subscription() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = (data, e) => {
     // console.log(JSON.stringify(data));
-    const postData = {
+    let postData = {
       emailid: data.email,
     };
-    axios
-      .post("/api/subscribe", postData)
-      .then((response) => {
-        const result = JSON.parse(response.data.data);
-        result &&
-          setSuccessMsg("Congratulations! You have successfully subscribed.");
-        // console.log(result);
-      })
-      .catch((error) => console.log(error));
+    if (e.target[0].value) {
+      axios
+        .post("/api/subscribe", postData)
+        .then((response) => {
+          const result = JSON.parse(response.data.data);
+          result &&
+            setSuccessMsg("Congratulations! You have successfully subscribed.");
+          setTimeout(() => {
+            postData = {};
+            e.target[0].value = "";
+            setSuccessMsg("");
+          }, 2000);
+        })
+        .catch((error) => console.log(error));
+    }
   };
   return (
     <>
@@ -39,6 +45,7 @@ export default function Subscription() {
             <Form.Control
               id="emailid"
               type="email"
+              autoComplete="off"
               placeholder="Enter your email"
               {...register("email", {
                 required: "Email is required",
