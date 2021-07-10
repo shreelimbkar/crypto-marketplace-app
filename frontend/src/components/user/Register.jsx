@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
+import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,22 +17,38 @@ const schema = yup.object().shape({
 });
 
 export default function Register() {
+  const [successMsg, setSuccessMsg] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const submitForm = (data) => {
-    console.log("DATA =", data);
+    // console.log("DATA =", data);
+    if (JSON.stringify({}) === "{}" && data) {
+      axios
+        .post("/api/users/register", data)
+        .then((response) => {
+          // console.log("response====", response);
+          const result = response.data;
+          result && setSuccessMsg("You have successfully registered.");
+          setTimeout(() => {
+            data = {};
+            setSuccessMsg("");
+            reset();
+          }, 2000);
+        })
+        .catch((error) => console.log(error));
+    }
   };
-  console.log(errors);
+  // console.log(errors);
   return (
     <Container fluid className="App" id="register">
-      <Row className="pt-5">
+      <Row className="pt-2">
         <Col md={{ span: 4, offset: 4 }}>
           <p className="text-center">
             <Link to="/">
@@ -49,9 +66,14 @@ export default function Register() {
             style={{ backgroundColor: "#ffd55a", color: "#293250" }}
             onSubmit={handleSubmit(submitForm)}
           >
+            {successMsg && (
+              <p className="text-center" style={{ color: "#00154f" }}>
+                {successMsg}
+              </p>
+            )}
             <h3 className="text-center">Register</h3>
 
-            <div className="form-group">
+            <div className="form-group mb-1">
               <label htmlFor="firstName">First name</label>
               <input
                 type="text"
@@ -70,7 +92,7 @@ export default function Register() {
               )}
             </div>
 
-            <div className="form-group">
+            <div className="form-group m-1">
               <label htmlFor="lastName">Last name</label>
               <input
                 type="text"
@@ -86,7 +108,7 @@ export default function Register() {
               )}
             </div>
 
-            <div className="form-group">
+            <div className="form-group m-1">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -102,7 +124,7 @@ export default function Register() {
               )}
             </div>
 
-            <div className="form-group">
+            <div className="form-group m-1">
               <label htmlFor="password">Password</label>
               <input
                 type="password"

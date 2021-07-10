@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <Container fluid className="App">
-      <Row className="pt-5">
+      <Row className="pt-2">
         <Col md={{ span: 4, offset: 4 }}>
           <p className="text-center">
             <Link to="/">
@@ -34,7 +34,7 @@ export default function Login() {
           >
             <h3 className="text-center">Log in</h3>
 
-            <div className="form-group">
+            <div className="form-group m-1">
               <label htmlFor="email">Email</label>
               <input
                 type="email"

@@ -71,7 +71,7 @@ def register(userData):
         data = {'firstName': firstName, 'lastName': lastName, 'email': email, 'password': pwd}
         result = requests.post(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS, json=data)
         if(result):
-            response = {'success': True, 'data': result.text}
+            response = {'success': True, 'data': "Success"}
             retData = app.response_class(
                 response=json.dumps(response),
                 status=200,
