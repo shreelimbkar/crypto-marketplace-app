@@ -3,8 +3,32 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
 import { Container, Row, Col } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(4).max(15).required(),
+  confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
+});
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const submitForm = (data) => {
+    console.log("DATA =", data);
+  };
+  console.log(errors);
   return (
     <Container fluid className="App" id="register">
       <Row className="pt-5">
@@ -23,27 +47,43 @@ export default function Register() {
           <form
             className="p-3"
             style={{ backgroundColor: "#ffd55a", color: "#293250" }}
+            onSubmit={handleSubmit(submitForm)}
           >
             <h3 className="text-center">Register</h3>
 
             <div className="form-group">
-              <label htmlFor="firstname">First name</label>
+              <label htmlFor="firstName">First name</label>
               <input
                 type="text"
-                className="form-control"
+                className={
+                  (errors.firstName && "required form-control") ||
+                  "form-control"
+                }
                 placeholder="First name"
-                id="firstname"
+                name="firstName"
+                id="firstName"
+                autoComplete="off"
+                {...register("firstName", { required: true })}
               />
+              {errors?.firstName && (
+                <p className="p-1 m-0 text-danger">First Name is required</p>
+              )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="lastname">Last name</label>
+              <label htmlFor="lastName">Last name</label>
               <input
                 type="text"
                 className="form-control"
                 placeholder="Last name"
-                id="lastname"
+                name="lastName"
+                id="lastName"
+                autoComplete="off"
+                {...register("lastName", { required: true })}
               />
+              {errors?.lastName && (
+                <p className="p-1 m-0 text-danger">Last Name is required</p>
+              )}
             </div>
 
             <div className="form-group">
@@ -52,18 +92,44 @@ export default function Register() {
                 type="email"
                 className="form-control"
                 placeholder="Enter email"
+                name="email"
                 id="email"
+                autoComplete="off"
+                {...register("email", { required: true })}
               />
+              {errors?.email && (
+                <p className="p-1 m-0 text-danger">Enter valid email address</p>
+              )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="pwd">Password</label>
+              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 className="form-control"
                 placeholder="Enter password"
-                id="pwd"
+                name="password"
+                id="password"
+                {...register("password", { required: true })}
               />
+              {errors?.password && (
+                <p className="p-1 m-0 text-danger">Password is required</p>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Confirm Password</label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                name="confirmPassword"
+                id="confirmPassword"
+                {...register("confirmPassword", { required: true })}
+              />
+              {errors?.confirmPassword && (
+                <p className="p-1 m-0 text-danger">Password should match</p>
+              )}
             </div>
 
             <button

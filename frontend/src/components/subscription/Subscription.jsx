@@ -54,7 +54,7 @@ export default function Subscription() {
                   message: "Incorrect email format",
                 },
               })}
-              style={{ border: errors.email && "1px solid red" }}
+              className={errors.email && "required"}
             />
           </Col>
           <Col xs="auto" className="my-1">
