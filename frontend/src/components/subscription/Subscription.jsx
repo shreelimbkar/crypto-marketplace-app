@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function Subscription() {
+  const [successMsg, setSuccessMsg] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    // console.log(JSON.stringify(data));
+    const postData = {
+      emailid: data.email,
+    };
+    axios
+      .post("/api/subscribe", postData)
+      .then((response) => {
+        const result = JSON.parse(response.data.data);
+        result &&
+          setSuccessMsg("Congratulations! You have successfully subscribed.");
+        // console.log(result);
+      })
+      .catch((error) => console.log(error));
+  };
   return (
     <>
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Row className="align-items-center">
           <Col sm={12} className="my-1">
             <p>
@@ -13,11 +36,25 @@ export default function Subscription() {
             </p>
           </Col>
           <Col sm={8} className="my-1">
-            <Form.Control id="emailid" placeholder="Enter your email" />
+            <Form.Control
+              id="emailid"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+                  message: "Incorrect email format",
+                },
+              })}
+              style={{ border: errors.email && "1px solid red" }}
+            />
           </Col>
           <Col xs="auto" className="my-1">
             <Button type="submit">Subscribe</Button>
           </Col>
+          {errors.email && <Col>{errors.email.message}</Col>}
+          {successMsg && <Col style={{ color: "#60a906" }}>{successMsg}</Col>}
         </Row>
       </Form>
     </>
