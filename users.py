@@ -48,8 +48,7 @@ def login(email, pwd):
     # encoded = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow(
     # ) + datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
     try:
-        print("EMAIL, PWD", email, pwd)
-        result = requests.get(f'{SUPABASE_URL}/users?email=eq{email}&password=eq{pwd}&select=id,firstName,lastName,email', headers=SUPABASE_HEADERS)
+        result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=id,firstName,lastName,email', headers=SUPABASE_HEADERS)
         if(result):
             response = {'success': True, 'data': result.text}
             retData = app.response_class(
