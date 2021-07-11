@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
 import axios from "axios";
@@ -10,10 +10,11 @@ import * as yup from "yup";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
-  password: yup.string().required(),
+  password: yup.string().min(4).max(15).required(),
 });
 
 export default function Login() {
+  const history = useHistory();
   const [successMsg, setSuccessMsg] = useState("");
   const {
     register,
@@ -24,19 +25,23 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
   const submitForm = (data) => {
-    console.log("DATA =", data);
+    // console.log("DATA =", data);
     if (JSON.stringify({}) === "{}" && data) {
       axios
         .post("/api/users/login", data)
         .then((response) => {
-          console.log("response====", response);
-          const result = response.data;
-          result && setSuccessMsg("You have logged in successfully.");
+          if (response.data.success && response.data.data.length > 2) {
+            // const result = JSON.parse(response.data.data)[0];
+            // console.log("ReSULT = ", result);
+            history.push("/");
+          } else {
+            setSuccessMsg("You forgot your email or password. Try again!");
+          }
           setTimeout(() => {
             data = {};
             setSuccessMsg("");
             reset();
-          }, 2000);
+          }, 3000);
         })
         .catch((error) => console.log(error));
     }
@@ -62,6 +67,9 @@ export default function Login() {
             style={{ backgroundColor: "#ffd55a", color: "#293250" }}
             onSubmit={handleSubmit(submitForm)}
           >
+            {successMsg && (
+              <p className="text-center text-danger">{successMsg}</p>
+            )}
             <h3 className="text-center">Log in</h3>
 
             <div className="form-group m-1">
@@ -91,7 +99,10 @@ export default function Login() {
                 {...register("password", { required: true })}
               />
               {errors?.password && (
-                <p className="p-1 m-0 text-danger">Password is required</p>
+                <p className="p-1 m-0 text-danger">
+                  Password is required. Please make sure your password is
+                  between 4 and 15 characters.
+                </p>
               )}
             </div>
 
@@ -103,7 +114,7 @@ export default function Login() {
               Log in
             </button>
             <p className="pt-2">
-              <Link to="/register">Register</Link>
+              <Link to="/register">Create new account? Register!</Link>
             </p>
           </form>
         </Col>

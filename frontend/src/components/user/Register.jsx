@@ -162,7 +162,7 @@ export default function Register() {
               Register
             </button>
             <p className="pt-2">
-              <Link to="/login">Already registered?</Link>
+              <Link to="/login">Already registered? Login!</Link>
             </p>
           </form>
         </Col>
