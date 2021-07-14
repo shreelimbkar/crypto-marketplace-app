@@ -7,6 +7,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import auth from "../../auth";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -33,6 +34,7 @@ export default function Login() {
           if (response.data.success && response.data.data.length > 2) {
             // const result = JSON.parse(response.data.data)[0];
             // console.log("ReSULT = ", result);
+            auth.login();
             history.push("/");
           } else {
             setSuccessMsg("You forgot your email or password. Try again!");

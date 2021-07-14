@@ -4,8 +4,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/styles.scss";
 
-import Home from "./components/dashboard";
+import { ProtectedRoute } from "./protected.route";
+import { Home, Dashboard } from "./components/dashboard";
 import { Login, Register } from "./components/user";
+import auth from "./auth";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
               <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
+              {/* {console.log("isauthenticated: ", auth.isAuthenticated())} */}
+              <ProtectedRoute path="/dashboard" component={Dashboard} />
             </Switch>
           </Col>
         </Row>

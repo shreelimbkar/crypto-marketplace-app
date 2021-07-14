@@ -2,6 +2,7 @@ import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
+import auth from "../../auth";
 
 export default function header() {
   return (
@@ -21,15 +22,27 @@ export default function header() {
         </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            {/* <Link to="/" className="nav-link">
-              Home
-            </Link> */}
-            <Link to="/register" className="nav-link">
-              Register
-            </Link>
-            <Link to="/login" className="nav-link">
-              Log In
-            </Link>
+            {auth.isAuthenticated() && (
+              <>
+                <Link to="/dashboard" className="nav-link">
+                  Dashboard
+                </Link>
+                <Link to="/logout" className="nav-link">
+                  Logout
+                </Link>
+              </>
+            )}
+
+            {!auth.isAuthenticated() && (
+              <>
+                <Link to="/register" className="nav-link">
+                  Register
+                </Link>
+                <Link to="/login" className="nav-link">
+                  Log In
+                </Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
