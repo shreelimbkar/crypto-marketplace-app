@@ -3,9 +3,6 @@ from flask import request
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 import hashlib
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 import os
 
