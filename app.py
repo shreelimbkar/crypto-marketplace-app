@@ -3,6 +3,11 @@ from flask import request
 from flask.helpers import send_from_directory
 from flask_cors import CORS, cross_origin
 import hashlib
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+import os
 
 import articles
 import users
@@ -12,6 +17,9 @@ import subscription
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
 CORS(app)
 
+# Setup the Flask JWT Extended
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+jwt = JWTManager(app)
 
 @app.route('/')
 def serve():

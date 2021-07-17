@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS, cross_origin
 import json
-# import jwt
+from flask_jwt_extended import create_access_token
 
 import os
 import requests
@@ -45,12 +45,11 @@ def login(email, pwd):
     if len(pwd.strip()) <= 0:
         return {'status': 500, 'responseMessage': 'Invalid Password. Please try again!'}, 500
 
-    # encoded = jwt.encode({'email': email, 'exp': datetime.datetime.utcnow(
-    # ) + datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
     try:
-        result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=id,firstName,lastName,email', headers=SUPABASE_HEADERS)
-        if(result):
-            response = {'success': True, 'data': result.text}
+        result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=firstName,email', headers=SUPABASE_HEADERS)
+        if(len(result.text) > 2):
+            access_token = create_access_token(identity=result.text)
+            response = {'success': True, 'data': access_token}
             retData = app.response_class(
                 response=json.dumps(response),
                 status=200,
