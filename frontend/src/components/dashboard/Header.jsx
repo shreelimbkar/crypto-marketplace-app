@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../../assets/logo.svg";
-import auth from "../../auth";
 
-export default function header() {
+export default function Header() {
+  const history = useHistory();
+  let user = useContext(GlobalContext);
+  user = user?.token || {
+    token: sessionStorage.getItem("token"),
+  };
+  const logout = () => {
+    sessionStorage.removeItem("token");
+    history.push("/");
+  };
+  console.log("header user", user);
   return (
     <>
       <Navbar sticky="top">
@@ -22,18 +32,22 @@ export default function header() {
         </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            {auth.isAuthenticated() && (
+            {user?.token ? (
               <>
                 <Link to="/dashboard" className="nav-link">
                   Dashboard
                 </Link>
-                <Link to="/logout" className="nav-link">
+                <Link
+                  to="/"
+                  className="nav-link"
+                  onClick={() => {
+                    logout();
+                  }}
+                >
                   Logout
                 </Link>
               </>
-            )}
-
-            {!auth.isAuthenticated() && (
+            ) : (
               <>
                 <Link to="/register" className="nav-link">
                   Register

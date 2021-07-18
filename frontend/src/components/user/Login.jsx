@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { GlobalContext } from "../../context/GlobalContext";
+import { Link, Redirect } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import auth from "../../auth";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -15,41 +15,53 @@ const schema = yup.object().shape({
 });
 
 export default function Login() {
-  const history = useHistory();
+  const [showLoader, setShowLoader] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const { setUser } = useContext(GlobalContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
   const submitForm = (data) => {
     // console.log("DATA =", data);
     if (JSON.stringify({}) === "{}" && data) {
+      setShowLoader(true);
       axios
         .post("/api/users/login", data)
         .then((response) => {
-          if (response.data.success && response.data.data.length > 2) {
-            // const result = JSON.parse(response.data.data)[0];
+          // console.log("response ", response);
+          if (response.data?.success && response.data?.data) {
+            const result = response.data.data;
+            setUser({
+              token: result,
+            });
+            sessionStorage.setItem("token", result);
+            setShowLoader(false);
             // console.log("ReSULT = ", result);
-            auth.login();
-            history.push("/");
+            // auth.login();
+            // history.push("/dashboard");
           } else {
+            setShowLoader(false);
             setSuccessMsg("You forgot your email or password. Try again!");
           }
-          setTimeout(() => {
-            data = {};
-            setSuccessMsg("");
-            reset();
-          }, 3000);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          setShowLoader(false);
+          setSuccessMsg("You forgot your email or password. Try again!");
+          console.log(error);
+        });
+      setTimeout(() => {
+        data = {};
+        setShowLoader(false);
+        setSuccessMsg("");
+        // reset();
+      }, 3000);
     }
   };
-  // console.log(errors);
-  return (
+  return !sessionStorage.getItem("token") ? (
     <Container fluid className="App">
       <Row className="pt-2">
         <Col md={{ span: 4, offset: 4 }}>
@@ -82,6 +94,7 @@ export default function Login() {
                 placeholder="Enter your email"
                 name="email"
                 id="email"
+                autoFocus
                 autoComplete="off"
                 {...register("email", { required: true })}
               />
@@ -114,6 +127,17 @@ export default function Login() {
               style={{ backgroundColor: "#293250", color: "#fff" }}
             >
               Log in
+              {showLoader && (
+                <div className="float-right">
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
             </button>
             <p className="pt-2">
               <Link to="/register">Create new account? Register!</Link>
@@ -122,5 +146,7 @@ export default function Login() {
         </Col>
       </Row>
     </Container>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 }

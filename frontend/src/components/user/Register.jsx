@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -17,6 +17,7 @@ const schema = yup.object().shape({
 });
 
 export default function Register() {
+  const [showLoader, setShowLoader] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const {
     register,
@@ -30,6 +31,7 @@ export default function Register() {
   const submitForm = (data) => {
     // console.log("DATA =", data);
     if (JSON.stringify({}) === "{}" && data) {
+      setShowLoader(true);
       axios
         .post("/api/users/register", data)
         .then((response) => {
@@ -38,15 +40,19 @@ export default function Register() {
           result && setSuccessMsg("You have successfully registered.");
           setTimeout(() => {
             data = {};
+            setShowLoader(false);
             setSuccessMsg("");
             reset();
           }, 2000);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          setShowLoader(false);
+          console.log(error);
+        });
     }
   };
   // console.log(errors);
-  return (
+  return !sessionStorage.getItem("token") ? (
     <Container fluid className="App" id="register">
       <Row className="pt-2">
         <Col md={{ span: 4, offset: 4 }}>
@@ -84,6 +90,7 @@ export default function Register() {
                 placeholder="First name"
                 name="firstName"
                 id="firstName"
+                autoFocus
                 autoComplete="off"
                 {...register("firstName", { required: true })}
               />
@@ -160,6 +167,17 @@ export default function Register() {
               style={{ backgroundColor: "#293250", color: "#fff" }}
             >
               Register
+              {showLoader && (
+                <div className="float-right">
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </div>
+              )}
             </button>
             <p className="pt-2">
               <Link to="/login">Already registered? Login!</Link>
@@ -168,5 +186,7 @@ export default function Register() {
         </Col>
       </Row>
     </Container>
+  ) : (
+    <Redirect to="/dashboard" />
   );
 }
