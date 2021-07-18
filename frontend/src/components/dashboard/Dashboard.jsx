@@ -3,7 +3,7 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
-import bitcoin from "../../assets/bitcoin2.jpg";
+import bitcoin from "../../assets/bitcoin.jpg";
 
 export default function Dashboard() {
   return (
