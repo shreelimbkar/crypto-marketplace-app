@@ -6,6 +6,7 @@ import "./css/styles.scss";
 
 import { ProtectedRoute } from "./protected.route";
 import { Home, Dashboard } from "./components/dashboard";
+import { Articles } from "./components/articles";
 import { Login, Register } from "./components/user";
 import { GlobalContext } from "./context/GlobalContext";
 
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/articles" component={Articles} />
               </GlobalContext.Provider>
             </Switch>
           </Col>

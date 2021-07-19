@@ -49,6 +49,9 @@ export default function Header() {
                 <Link to="/dashboard" className="nav-link" title="Dashboard">
                   Dashboard
                 </Link>
+                <Link to="/articles" className="nav-link" title="Articles">
+                  Articles
+                </Link>
                 <Link
                   to="/"
                   className="nav-link"
