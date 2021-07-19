@@ -88,7 +88,6 @@ def newArticle():
         req_json = request.json
         title = req_json['title']
         desc = req_json['description']
-        # print("EMAIL ID = ", emailid)
     return articles.addNewArticle(title, desc)
 
 if __name__ == "__main__":
