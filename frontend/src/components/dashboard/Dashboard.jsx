@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Header from "./Header";
 import Footer from "./Footer";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import bitcoin from "../../assets/bitcoin.jpg";
+import axios from "axios";
 
 export default function Dashboard() {
+  const [cryptodata, setCryptodata] = useState({});
+  const getCryptoData = async () => await axios.get("/api/cryptos");
+
+  useEffect(() => {
+    const data = getCryptoData();
+    data
+      .then((res) => {
+        console.log("Response = ", JSON.parse(res.data.data));
+        setCryptodata(JSON.parse(res.data.data));
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
   return (
     <>
       <Header />
