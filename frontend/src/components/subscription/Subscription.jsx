@@ -37,8 +37,8 @@ export default function Subscription() {
         <Row className="align-items-center">
           <Col sm={12} className="my-1">
             <p>
-              Get the latest crypto news, updates, and reports by subscribing to
-              our free newsletter.
+              Subscribe to our free email to receive the newest crypto news,
+              updates, and reports.
             </p>
           </Col>
           <Col sm={8} className="my-1">

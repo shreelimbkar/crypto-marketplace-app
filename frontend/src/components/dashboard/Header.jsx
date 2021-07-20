@@ -46,6 +46,9 @@ export default function Header() {
                     Welcome {userFirstName} |{" "}
                   </span>
                 )}
+                <Link to="/" className="nav-link" title="Home">
+                  Home
+                </Link>
                 <Link to="/dashboard" className="nav-link" title="Dashboard">
                   Dashboard
                 </Link>
