@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager
 import os
 
 import articles
+import cryptos
 import users
 import news
 import subscription
@@ -89,6 +90,11 @@ def newArticle():
         title = req_json['title']
         desc = req_json['description']
     return articles.addNewArticle(title, desc)
+
+@app.route('/api/cryptos', methods=['GET'])
+@cross_origin()
+def getAllCryptos():
+    return cryptos.getCryptos()
 
 if __name__ == "__main__":
     app.run()
