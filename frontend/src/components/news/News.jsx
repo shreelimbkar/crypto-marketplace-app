@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Spinner } from "react-bootstrap";
 import axios from "axios";
 
 import NewsList from "./NewsList";
 
 export default function News() {
   const [data, setData] = useState([]);
+  const [showNewsLoader, setShowNewsLoader] = useState(true);
 
   useEffect(() => {
     axios
@@ -13,14 +14,23 @@ export default function News() {
       .then((response) => {
         const result = JSON.parse(response.data.data);
         setData(result);
+        setShowNewsLoader(false);
       })
       .catch((error) => console.log(error));
   }, []);
   return (
     <>
       <ListGroup as="ul">
-        {!data?.articles ? (
-          <div>Loading...</div>
+        {showNewsLoader ? (
+          <div className="text-center">
+            <Spinner
+              as="span"
+              animation="border"
+              size="lg"
+              role="status"
+              aria-hidden="true"
+            />
+          </div>
         ) : (
           data?.articles.map((news, index) => {
             return <NewsList key={index} data={news} />;
