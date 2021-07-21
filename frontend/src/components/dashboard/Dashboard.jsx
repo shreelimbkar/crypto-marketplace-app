@@ -13,6 +13,8 @@ import {
 } from "react-bootstrap";
 import bitcoin from "../../assets/bitcoin.jpg";
 import axios from "axios";
+import News from "../news/News";
+import Subscription from "../subscription/Subscription";
 
 export default function Dashboard() {
   const [cryptodata, setCryptodata] = useState({});
@@ -30,6 +32,14 @@ export default function Dashboard() {
         console.log(e);
       });
   }, []);
+
+  const formatInPercent = (num) => `${Number(num).toFixed(2)}%`;
+  const formatInDollar = (num, maxDigits) =>
+    Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "usd",
+      maxDigits,
+    }).format(num);
 
   return (
     <>
@@ -50,7 +60,7 @@ export default function Dashboard() {
                         <tr>
                           <th>Rank</th>
                           <th>Symbol</th>
-                          <th>24th Change</th>
+                          <th>24h Change</th>
                           <th>Price</th>
                           <th>Market cap</th>
                         </tr>
@@ -74,16 +84,53 @@ export default function Dashboard() {
                           cryptodata.map((coin, index) => (
                             <tr key={coin.id}>
                               <td>{index + 1}</td>
-                              <td>{coin.symbol.toUpperCase()}</td>
-                              <td>{coin.current_price}</td>
-                              <td>{coin.current_price}</td>
-                              <td>{coin.market_cap}</td>
+                              <td>
+                                <Image
+                                  src={coin.image}
+                                  style={{
+                                    width: 25,
+                                    height: 25,
+                                    marginRight: 10,
+                                  }}
+                                  className="banner-img"
+                                />
+                                {coin.symbol.toUpperCase()}
+                              </td>
+                              <td>
+                                <span
+                                  className={
+                                    coin.price_change_percentage_24h > 0
+                                      ? "text-success"
+                                      : "text-danger"
+                                  }
+                                >
+                                  {formatInPercent(
+                                    coin.price_change_percentage_24h
+                                  )}
+                                </span>
+                              </td>
+                              <td>{formatInDollar(coin.current_price, 20)}</td>
+                              <td>{formatInDollar(coin.market_cap, 12)}</td>
                             </tr>
                           ))
                         )}
                       </tbody>
                     </Table>
                   </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col sm={4} className="p-4">
+              <Card className="mb-4">
+                <Card.Header as="h5">Newsletter Subscription</Card.Header>
+                <Card.Body>
+                  <Subscription />
+                </Card.Body>
+              </Card>
+              <Card>
+                <Card.Header as="h5">Cryptocurrency News</Card.Header>
+                <Card.Body className="news-list" style={{ maxHeight: "none" }}>
+                  <News />
                 </Card.Body>
               </Card>
             </Col>

@@ -52,7 +52,7 @@ export default function Home() {
               </Card>
               <Card>
                 <Card.Header as="h5">Cryptocurrency News</Card.Header>
-                <Card.Body className="news-list">
+                <Card.Body className="news-list" style={{ maxHeight: "100vh" }}>
                   <News />
                 </Card.Body>
               </Card>
