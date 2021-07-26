@@ -46,8 +46,9 @@ def login(email, pwd):
         return {'status': 500, 'responseMessage': 'Invalid Password. Please try again!'}, 500
 
     try:
-        result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=firstName,email', headers=SUPABASE_HEADERS)
+        result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=firstName,email,role', headers=SUPABASE_HEADERS)
         if(len(result.text) > 2):
+            print("result.text", result.text)
             access_token = create_access_token(identity=result.text)
             response = {'success': True, 'data': access_token}
             retData = app.response_class(
@@ -66,7 +67,7 @@ def register(userData):
     SUPABASE_HEADERS['Prefer'] = 'return=representation'
     firstName, lastName, email, pwd = userData
     try:
-        data = {'firstName': firstName, 'lastName': lastName, 'email': email, 'password': pwd}
+        data = {'firstName': firstName, 'lastName': lastName, 'email': email, 'password': pwd, 'role': 'user'}
         result = requests.post(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS, json=data)
         if(result):
             response = {'success': True, 'data': "Success"}
