@@ -8,7 +8,8 @@ import logo from "../../assets/logo.svg";
 export default function Header() {
   const history = useHistory();
   let userDetails = null;
-  let userFirstName = "";
+  let userFirstName,
+    userRole = "";
   let user = useContext(GlobalContext);
   user = user?.token || {
     token: sessionStorage.getItem("token"),
@@ -21,6 +22,7 @@ export default function Header() {
   if (user?.token) {
     userDetails = jwt_decode(user.token);
     userFirstName = JSON.parse(userDetails.sub)[0].firstName;
+    userRole = JSON.parse(userDetails.sub)[0].role;
   }
   return (
     <>
@@ -52,9 +54,11 @@ export default function Header() {
                 <Link to="/dashboard" className="nav-link" title="Dashboard">
                   Dashboard
                 </Link>
-                <Link to="/articles" className="nav-link" title="Articles">
-                  Articles
-                </Link>
+                {user?.token && userRole === "admin" && (
+                  <Link to="/articles" className="nav-link" title="Articles">
+                    Articles
+                  </Link>
+                )}
                 <Link
                   to="/"
                   className="nav-link"
