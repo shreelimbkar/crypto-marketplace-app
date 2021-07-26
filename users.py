@@ -48,7 +48,6 @@ def login(email, pwd):
     try:
         result = requests.get(f'{SUPABASE_URL}/users?email=eq.{email}&password=eq.{pwd}&select=firstName,email,role', headers=SUPABASE_HEADERS)
         if(len(result.text) > 2):
-            print("result.text", result.text)
             access_token = create_access_token(identity=result.text)
             response = {'success': True, 'data': access_token}
             retData = app.response_class(
