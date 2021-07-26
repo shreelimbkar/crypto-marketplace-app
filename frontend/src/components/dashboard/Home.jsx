@@ -1,13 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
+import Parser from "html-react-parser";
 import Header from "./Header";
 import Footer from "./Footer";
-import { Container, Row, Col, Card, Image } from "react-bootstrap";
+import { Container, Row, Col, Card, Image, Spinner } from "react-bootstrap";
+import axios from "axios";
 import bitcoin from "../../assets/bitcoin2.jpg";
 import News from "../news/News";
 import Subscription from "../subscription/Subscription";
 
 export default function Home() {
+  const [showLoader, setShowLoader] = useState(false);
+  const [articles, setarticles] = useState([]);
+  // load all articles on page load
+  useEffect(() => {
+    setShowLoader(true);
+    axios
+      .get("/api/articles")
+      .then((response) => {
+        const result = JSON.parse(response.data.data);
+        console.log("Articles = ", result);
+        setarticles(result);
+        setShowLoader(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowLoader(false);
+      });
+  }, []);
+
   return (
     <>
       <Header />
@@ -16,32 +37,26 @@ export default function Home() {
           <Row>
             <Col sm={8} className="p-4">
               <Image src={bitcoin} className="banner-img" />
-              <Card className="mt-4">
-                <Card.Header as="h5">What is cryptocurrency?</Card.Header>
-                <Card.Body>
-                  {/* <Card.Title>Special title treatment</Card.Title> */}
-                  <Card.Text>
-                    Cryptocurrency is a type of online payment that may be used
-                    to buy and sell products and services. Many businesses have
-                    created their own currencies, known as tokens, that can be
-                    exchanged for the goods or services that the business
-                    offers. Consider them to be arcade tokens or casino chips.
-                    To obtain the item or service, we will need to swap actual
-                    money for bitcoin.
-                  </Card.Text>
-                  <Card.Text>
-                    Blockchain is the technology that enables cryptocurrency to
-                    function. Blockchain is a decentralized system that
-                    organizes and records transactions across multiple
-                    computers. The security of this technology is part of its
-                    attraction. We may be aware with the most popular versions,
-                    Bitcoin and Ethereum, but according to CoinLore, there are
-                    over 5,000 other cryptocurrencies in circulation. While this
-                    statement is accurate, it falls short of capturing what
-                    makes Bitcoin so special and enticing to so many investors.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
+              {showLoader ? (
+                <div className="text-center p-3">
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="lg"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                </div>
+              ) : (
+                articles.map((art, index) => {
+                  return (
+                    <Card className="mt-4" key={index}>
+                      <Card.Header as="h5">{art.title}</Card.Header>
+                      <Card.Body>{Parser(art.description)}</Card.Body>
+                    </Card>
+                  );
+                })
+              )}
             </Col>
             <Col sm={4} className="p-4">
               <Card className="mb-4">
