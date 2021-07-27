@@ -2,7 +2,10 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 import json
 from flask_jwt_extended import create_access_token
-
+# send email to user
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import os
 import requests
 
@@ -69,6 +72,16 @@ def register(userData):
         data = {'firstName': firstName, 'lastName': lastName, 'email': email, 'password': pwd, 'role': 'user'}
         result = requests.post(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS, json=data)
         if(result):
+            # Send OTP email to registered User
+            subject = "Welcome to Cryptocurrency MarketPlace Blog"
+            body = f"""
+                <h3>Welcome to Cryptocurrency MarketPlace Blog</h3>
+                <p>Hi {firstName},</p>
+                <p>Thanks for registering to Cryptocurrency Blog. You can log in again with the email address {email}</p>
+                <p>Cheers,<br/>Cryptocurrency Admin Team,<br/>Dublin 1.</p>
+            """
+            send_email('shricryptoblog@gmail.com',
+                    'Shree@2@21', email, subject, body)
             response = {'success': True, 'data': "Success"}
             retData = app.response_class(
                 response=json.dumps(response),

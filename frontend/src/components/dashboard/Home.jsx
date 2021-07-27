@@ -19,7 +19,6 @@ export default function Home() {
       .get("/api/articles")
       .then((response) => {
         const result = JSON.parse(response.data.data);
-        console.log("Articles = ", result);
         setarticles(result);
         setShowLoader(false);
       })
