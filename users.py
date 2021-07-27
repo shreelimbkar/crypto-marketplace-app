@@ -19,11 +19,6 @@ SUPABASE_HEADERS = {
 }
 
 def getUsers():
-    # SUPABASE_URL="https://nphwmgpfpqxwnutrnljz.supabase.co/rest/v1"
-    # SUPABASE_API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyNDk2MzU1MCwiZXhwIjoxOTQwNTM5NTUwfQ.zsoD06SQspY-Uj6sjAX_qPfSTYC5sauxnH6a20BcuTE"
-    # print("SUPABASE_URL: ", os.getenv('SUPABASE_URL'))
-    # print("SUPABASE_API_KEY: ", os.getenv('SUPABASE_API_KEY'))
-
     try:
         result = requests.get(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS)
         if(result):
@@ -72,7 +67,7 @@ def register(userData):
         data = {'firstName': firstName, 'lastName': lastName, 'email': email, 'password': pwd, 'role': 'user'}
         result = requests.post(f'{SUPABASE_URL}/users', headers=SUPABASE_HEADERS, json=data)
         if(result):
-            # Send OTP email to registered User
+            # Send welcome email to registered User
             subject = "Welcome to Cryptocurrency MarketPlace Blog"
             body = f"""
                 <h3>Welcome to Cryptocurrency MarketPlace Blog</h3>
@@ -93,3 +88,21 @@ def register(userData):
             return {'success': False, 'status': 500, 'message': 'Unauthorized User. Please try again!'}, 500
     except Exception as e:
         return {'success': False, 'message': str(e)}, 500
+
+def send_email(gmailUser, gmailPassword, recipient, subject, body):
+    msg = MIMEMultipart()
+    msg['From'] = f'"Cryptocurrency MarketPlace Admin " <shricryptoblog@gmail.com>'
+    msg['To'] = recipient
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'html'))
+
+    try:
+        mailServer = smtplib.SMTP('smtp.gmail.com', 587)
+        mailServer.ehlo()
+        mailServer.starttls()
+        mailServer.ehlo()
+        mailServer.login(gmailUser, gmailPassword)
+        mailServer.sendmail(gmailUser, recipient, msg.as_string())
+        mailServer.close()
+    except LookupError:
+        print('Something went wrong...', LookupError)
