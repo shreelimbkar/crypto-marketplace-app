@@ -29,7 +29,7 @@ def serve():
 def api():
     return {
         'userid': 1,
-        'title': 'Flask react Application',
+        'title': 'Welcome to Cryptocurrency Marketplace Flask react Application',
         'completed': False
     }
 
